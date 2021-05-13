@@ -11,6 +11,7 @@ print(tensor)
 
 print(variable)
 
+
 t_out = torch.mean(tensor*tensor)
 v_out = torch.mean(variable*variable)
 print(t_out)
