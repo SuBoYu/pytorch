@@ -1,39 +1,40 @@
 import torch
+import torch.nn.functional as F
 import matplotlib.pyplot as plt
 
-# # 快速搭建法
-#
-# class Net(torch.nn.Module):
-#     def __init__(self, n_feature, n_hidden, n_output):
-#         super(Net, self).__init__()
-#         self.hidden = torch.nn.Linear(n_feature, n_hidden)
-#         self.predict = torch.nn.Linear(n_hidden, n_output)
-#
-#     def forward(self, x):
-#         x = F.relu(self.hidden(x))
-#         x = self.predict(x)
-#         return x
-#
-#
-# net1 = Net(1, 10, 1)  # 这是我们用这种方式搭建的 net1
-#
-# # 更快方式
-# net2 = torch.nn.Sequential(
-#     torch.nn.Linear(1, 10),
-#     torch.nn.ReLU(),
-#     torch.nn.Linear(10, 1)
-# )
-#
-# print(net1)
-#
-# print(net2)
+# 快速搭建法
+
+class Net(torch.nn.Module):
+    def __init__(self, n_feature, n_hidden, n_output):
+        super(Net, self).__init__()
+        self.hidden = torch.nn.Linear(n_feature, n_hidden)
+        self.predict = torch.nn.Linear(n_hidden, n_output)
+
+    def forward(self, x):
+        x = F.relu(self.hidden(x))
+        x = self.predict(x)
+        return x
+
+
+net1 = Net(1, 10, 1)  # 这是我们用这种方式搭建的 net1
+
+# 更快方式
+net2 = torch.nn.Sequential(
+    torch.nn.Linear(1, 10),
+    torch.nn.ReLU(),
+    torch.nn.Linear(10, 1)
+)
+
+print(net1)
+
+print(net2)
 
 # 保存提取
 
 torch.manual_seed(1)  # reproducible
 
 # 假数据
-x = torch.unsqueeze(torch.linspace(-1, 1, 100), dim=1)  # x data (tensor), shape=(100, 1)
+x = torch.unsqueeze(torch.linspace(-1, 1, 100), 1)  # x data (tensor), shape=(100, 1)
 y = x.pow(2) + 0.2 * torch.rand(x.size())  # noisy y data (tensor), shape=(100, 1)
 
 
@@ -44,11 +45,11 @@ def save():
         torch.nn.ReLU(),
         torch.nn.Linear(10, 1)
     )
-    optimizer = torch.optim.SGD(net1.parameters(), lr=0.5)
+    optimizer = torch.optim.SGD(net1.parameters(), lr=0.05)
     loss_func = torch.nn.MSELoss()
 
     # 训练
-    for t in range(100):
+    for t in range(500):
         prediction = net1(x)
         loss = loss_func(prediction, y)
         optimizer.zero_grad()

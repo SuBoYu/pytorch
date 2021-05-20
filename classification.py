@@ -27,8 +27,8 @@ class Net(torch.nn.Module):  # 继承 torch 的 Module
     def forward(self, x):
         # 正向传播输入值, 神经网络分析出输出值
         x = F.relu(self.hidden(x))  # 激励函数(隐藏层的线性值)
-        x = self.out(x)   # 输出值, 但是这个不是预测值, 预测值还需要再另外计算
-        return x
+        y = self.out(x)   # 输出值, 但是这个不是预测值, 预测值还需要再另外计算
+        return y
 
 net = Net(n_feature=2, n_hidden=10, n_output=2)  #几个类别就几个 output
 
